@@ -47,6 +47,7 @@ $(function(){
      //generates axes
     function generatePlane() { //generates x and y axes
         c.beginPath();
+        c.strokeStyle = "rgba(0,0,255,0.3)";
         var currentPt;
         //horizontal(y) lines
         for (var i = 0; i <= (yMax - yMin) ; i++) {
@@ -54,21 +55,27 @@ $(function(){
             c.moveTo(currentPt, 0);
             c.lineTo(currentPt, canvas.height);
         }
-        //y axis
-        c.moveTo(canvas.width / 2, 0); 
-        c.lineTo(canvas.width / 2, canvas.height);
+
         //vertical(x) lines
         for (var i = 0; i <= (xMax - xMin) ; i++) {
             currentPt = (xMin + xMax + i) * canvas.width / (xMax - xMin);
             c.moveTo(0, currentPt);
             c.lineTo(canvas.width, currentPt);
         }
+        c.stroke();
+        c.beginPath();
+        //y axis
+        c.strokeStyle = "#000";
+        c.moveTo(canvas.width / 2, 0); 
+        c.lineTo(canvas.width / 2, canvas.height);
+       
         //x axis
+
         c.moveTo(0, canvas.height / 2);
         c.lineTo(canvas.width, canvas.height / 2);
-
-
         c.stroke();
+
+        
     }
 
     generatePlane();
@@ -160,7 +167,8 @@ $(function(){
 
         // Evaluate the previously parsed math expression and return it
         return tree.eval();
-    }
+    }
+
     //takes approximate derivative at x with alternate form of difference quotient f(x+h)-f(x-h)/2h ~= f'(x) 
     function calculateDerivative(x) {
         //operates on assumption that f(x) = expr

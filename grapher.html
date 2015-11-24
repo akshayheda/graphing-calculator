@@ -1,78 +1,73 @@
-﻿<!DOCTYPE html>
+﻿<!DOCTYPE>
 <html>
-  <head>
-    <meta charset=utf-8 />
-    <title>Graphing Calculator</title>
-
-    <!-- Load dependencies. -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/mathjs/0.15.0/math.min.js"></script>
-     <!-- <script src="Newton'sMethod.js"></script> -->
-      <!-- In case I ever need a symbolic derivative:
+<head>
+	<title>Graphing Calculator</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" type="text/css" href="screen.css" media="screen" />
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/mathjs/0.15.0/math.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Orbitron:500' rel='stylesheet' type='text/css'>
+	<script src="grapher.js"></script>
+	<!-- <script src="Newton'sMethod.js"></script> -->
+	<!-- In case I ever need a symbolic derivative:
       <script src="http://nerdamer.com/js/nerdamer.core.js"></script>
       <script src="http://nerdamer.com/js/Algebra.js"></script>
       <script src="http://nerdamer.com/js/Calculus.js"></script>
           -->
-      <script src="grapher.js"></script>
-      <style>
-          div#outerDiv {
-              width: 250px;
-          }
-          div#leftDivR {
-              float: left;
-              height: 10px;
-              width: 10px;
-              background-color: #ff0f00;
-          }
-          div#leftDivP {
-              float: left;
-              height: 10px;
-              width: 10px;
-              background-color: #9900CC;
-          }
-          div#leftDivG {
-              float: left;
-              height: 10px;
-              width: 10px;
-              background-color: #336600;
-          }
-          div#rightDiv {
-              display: inline;
-              margin-left: 10px;
-          }
-      </style>
-  </head>
+</head>
 <body>
-    <!--
-    <div id="firstDeriv">f'(x)=  </div><div id="derivResult"></div> -->
-    <!-- This text field will contain the math expression to plot. -->
-    <!-- <div id="secondDeriv">f''(x)= </div><div id="deriv2Result"></div> -->
 
-    <canvas width="600" height="600" id="myCanvas"></canvas>
-    <br />
-    <br />
-    <input type="text" id="inputField">
-    <!-- <div>Relative Extremum:  </div><div id="extrema"></div> -->
-    <!-- The math expression will be plotted on this Canvas. -->
-    <input type="button" id="btnGraph" value="Graph" />
-    <br />
-    <br />
-    Function Type:
-    
-    <br />
-    <form>
-        <input type="radio" name="functionType" value="rational" id="rational">Radical Function
-        <br />
-        <input type="radio" name="functionType" value="polynomial" id="polynomial" checked>Polynomial Function
-        <br />
-        <input type="radio" name="functionType" value="other" id="other">Logarithmic, Trigonometric, or Exponential Function
-    </form>
-    <br />
-    <div id="xycoordinates"></div>
-    <div id="outerDiv"><div id="leftDivR"></div>  <div id="rightDiv">Function</div></div>
-    <div id="outerDiv"><div id="leftDivP"></div>  <div id="rightDiv">First Derivative </div></div>
-    <div id="outerDiv"><div id="leftDivG"></div>  <div id="rightDiv">Second Derivative </div></div>
+	<div id="header">
+		<h1>A Graphing Calculator</h1>
+		<p id="layoutdims"></p>
+	</div>
+	<div class="colmask leftmenu">
+		<div class="colleft">
+			<div class="col1">
+				<canvas width="600" height="600" id="myCanvas"></canvas>
+			</div>
+			<div class="col2">
+				<input type="text" id="inputField">
+				<!-- <div>Relative Extremum:  </div><div id="extrema"></div> -->
+				<!-- The math expression will be plotted on this Canvas. -->
+				<input type="button" id="btnGraph" value="Graph" />
+				<br />
+                <div id="radioStyle" class="regularFont">
+                    <br />
+                    Function Type:
 
-    <br />
+                    <br />
+                    <input type="radio" name="functionType" value="rational" id="rational">Radical Function
+
+                    <br />
+                    <input type="radio" name="functionType" value="polynomial" id="polynomial" checked>Polynomial Function
+
+                    <br />
+                    <input type="radio" name="functionType" value="other" id="other">Logarithmic, Trigonometric, or Exponential Function
+                </div>
+				<br />
+
+                <div id="xycoordinates" class="regularFont">
+                    <div id="outerDiv">
+                        <div id="leftDivR"></div>
+                        <div id="rightDiv">Function</div>
+                    </div>
+                    <div id="Div1">
+                        <div id="leftDivP"></div>
+                        <div id="Div2">First Derivative </div>
+                    </div>
+                    <div id="Div3">
+                        <div id="leftDivG"></div>
+                        <div id="Div4">Second Derivative </div>
+                    </div>
+                </div>
+			</div>
+		</div>
+	</div>
+	<div id="footer">
+		<p>-Shirlyn Prabahar</p>
+	</div>
+
 </body>
 </html>
