@@ -8,8 +8,8 @@
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/mathjs/0.15.0/math.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Josefin+Sans' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Orbitron:500' rel='stylesheet' type='text/css'>
-	<script src="grapher.js"></script>
-	<!-- <script src="Newton'sMethod.js"></script> -->
+    <script src="jscolor.js"></script>
+	<script type="text/javascript" src="grapher.js"></script>
 	<!-- In case I ever need a symbolic derivative:
       <script src="http://nerdamer.com/js/nerdamer.core.js"></script>
       <script src="http://nerdamer.com/js/Algebra.js"></script>
@@ -50,16 +50,16 @@
 
                 <div id="xycoordinates" class="regularFont">
                     <div id="outerDiv">
-                        <div id="leftDivR"></div>
-                        <div id="rightDiv">Function</div>
+                        <button class="jscolor {valueElement:null,value:'ff0f00'}"
+                                style="width:50px; height:20px;" id="functionColor"></button> Function
                     </div>
                     <div id="Div1">
-                        <div id="leftDivP"></div>
-                        <div id="Div2">First Derivative </div>
+                        <button class="jscolor {valueElement:null,value:'9900CC'}"
+                                style="width:50px; height:20px;" id="derivColor"></button> First Derivative
                     </div>
-                    <div id="Div3">
-                        <div id="leftDivG"></div>
-                        <div id="Div4">Second Derivative </div>
+                    <div id="Div3">                        
+                        <button class="jscolor {valueElement:null,value:'336600'}"
+                                style="width:50px; height:20px;" id="2derivColor"></button> Second Derivative
                     </div>
                 </div>
 			</div>
