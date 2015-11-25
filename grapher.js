@@ -192,15 +192,20 @@ $(function(){
    
 
     function extrema() {
-        for (var i = xMin; i < xMax; i++) {
+        var xVal, yVal;
+        for (var i = xMin; i < xMax; i=i+0.05) { //change increment value
             var derivative = calculateDerivative(i);
-            if (Math.abs(derivative) < 0.0005) { //accounts for floating point error
+            if (Math.abs(derivative) < 0.0005) { //accounts for floating point error (ish)
                 var secondDeriv = calculateSecondDerivative(i);
-                    if(secondDeriv > 0) { //if is rel min
-                        //marker for rel min
+                if (secondDeriv > 0) { //if is rel min
+                    xVal = i;
+                    yVal = evaluateMathExpr(i);
+                    //draw circle around this point
                     }
                     else if(secondDeriv < 0) { //if is rel max
-                        //marker for rel max
+                        xVal = i;
+                        yVal = evaluateMathExpr(i);
+                        //draw circle around this point
                     }
                 
             }
@@ -213,26 +218,26 @@ $(function(){
     //takes val of x coordinate and corresponding second derivative as parameter
     function concavity() { //assuming f(x) == expr
         for(var i = xMin; i < xMax; i++) {
-            var secondDeriv = calculateSecondDerivative(i);
+            var secondDeriv = calculateSecondDerivative(i); //secondDerivative at x=i
                 if (Math.abs(secondDeriv) < 0.005) { //accounts for floating point arithmetic error, may need to be changed
                     //at inflection point, should draw line
-                    c.moveTo(xVal, 0);
-                    c.lineTo(xVal, canvas.height);
+                    c.moveTo(i, 0);
+                    c.lineTo(i, canvas.height);
 
                 }
            else if (secondDeriv < 0) {
             //if concave down
             //draws rectangle
-            c.rect(xVal, 0, (xVal + 1), canvas.height);
+            c.rect(i, 0, (i + 1), canvas.height);
             c.fillStyle = "yellow";
-            c.fillRect();
+            c.fillRect(i, 0, (i + 1), canvas.height);
 
         } 
        else if(secondDeriv > 0) {
             //if concave up
-            c.rect(xVal, 0, (xVal + 1), canvas.height);
+            c.rect(i, 0, (i + 1), canvas.height);
             c.fillStyle = "gray";
-            c.fillRect();
+            c.fillRect(i, 0, (i + 1), canvas.height);
         }
         }
             //should now draw a rectangle of height canvas.height and width canvas.width/n 
@@ -241,7 +246,7 @@ $(function(){
     }
 
     //function to solve for when the denominator = 0;
-    //assumes expression to work with is assigned to expr
+    //assumes expression to work with is assigned to expr, sets expr == denominator of function
     function calculateAsymptotes() {
         var denominator;
         for(var i = 0; i < expr.length; i++) {
@@ -252,11 +257,12 @@ $(function(){
         }
         setExpr(denominator);
         allZeroes();
-        for (var j = 0; j < zeroes.length; j++) { //draws a horizontal line for every place where function is undefined
-            var currentPt = (xMin + xMax + zeroes[j]) * canvas.width / (xMax - xMin);
-            c.moveTo(0, currentPt);
-            c.lineTo(canvas.width, currentPt);
+        for (var j = 0; j < zeroes.length; j++) { //draws a vertical line for every place where function is undefined
+            var currentPt = (xMax + zeroes[j]) * canvas.width / (xMax - xMin); //find xVal
+            c.moveTo(currentPt, 0);
+            c.lineTo(currentPt, canvas.height);
         }
+        c.stroke();
 
     }
    
@@ -281,8 +287,8 @@ $(function(){
 
     //calculates removable discontinuities by evaluating zeroes of numerator and denominator and checking for same values
     function removable(numerator) {
-        var zero = calculateZero(0.5, numerator);
-        console.log(zero);
+        setExpr(numerator);
+        var numeratorZeroes = 0;
     }
 
     var iterations = 0; //for the next recursive method
@@ -320,22 +326,29 @@ $(function(){
 
     var zeroes = [];
 
-    //calculates all zeroes; parameter f is function input
+    //calculates all zeroes and assigns = zeroes[];
     //calls function calculateZero for this
     //assigns zeroes to (global?) array zeroes
+    //has lots of problems b/c array is full of repeat values
     function allZeroes() {
         //checks zeroes for each point on graph; needs to be optimized
+        var nextZero;
+        var current = 1;
         for (var i = xMin; i <= xMax ; i = i + 0.5) {
-            zeroes.push(calculateZero(i)); //adds the root to array of zeroes
-        }
-        //next for loop clears out repeat zeroes
-        //Unfortunately, doesn't work right now
-        for (var j = 1; j <= zeroes.length ; j++) {
-            if (Math.abs(zeroes[j] - zeroes[j - 1]) < 0.005) { //tries to account for floating point error
-                zeroes.splice(j - 1, 1); //remove element at j-1 if is a repeat
+            nextZero = calculateZero(i);
+            //if a previous zero has been calculated and the difference between them is large enough
+            if (zeroes[current - 1] != null && Math.abs(zeroes[current - 1]) - Math.abs(nextZero) > 0.005) {
+                zeroes.push(nextZero); //adds the root to array of zeroes
+                ++current;
             }
+            //or if is first zero calculated and has a value
+            else if (zeroes[current - 1] == null && !(nextZero.isNaN)) {
+                zeroes.push(nextZero);
+                ++current;
+            }
+            //current keeps track of which cell of array we're on
         }
-
+       
     }
 
     //when button is clicked, graphs curves
@@ -352,11 +365,12 @@ $(function(){
 
         //setExpr($('#derivResult').text()); //graphs second derivative
         drawCurve(false, '336600', true);
-         
-        if ($('#rational').checked) {
+
+         //not working
+        if ($('#rational').is(':checked')) {
             calculateAsymptotes();
         }
-        else if ($('#polynomial').checked || $('other').checked) {
+        else if ($('#polynomial').is(':checked') || $('#other').is(':checked')) {
             extrema();
             concavity();
         }
