@@ -124,6 +124,10 @@ img {
 	padding:50 0 1em 0;
 	overflow:hidden;
 }
+.col2 {
+    	padding:50 0 50 0;
+}
+
 /* 2 Column (left menu) settings */
 .leftmenu {
 	background:#fff;		/* right column background colour */
@@ -183,4 +187,10 @@ img {
 		   div#xycoordinates {
               margin-top: 100px;
           }
+           div#inputStyle {
+               margin-top: 50px;
+           }
+           #btnGraph{
+               margin-top:15px;
+           }
 		  
