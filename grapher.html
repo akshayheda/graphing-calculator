@@ -28,10 +28,7 @@
 				<canvas width="600" height="600" id="myCanvas"></canvas>
 			</div>
 			<div class="col2">
-				<input type="text" id="inputField">
-				<!-- <div>Relative Extremum:  </div><div id="extrema"></div> -->
-				<!-- The math expression will be plotted on this Canvas. -->
-				<input type="button" id="btnGraph" value="Graph" />
+				
 				<br />
                 <div id="radioStyle" class="regularFont">
                     <br />
@@ -47,26 +44,42 @@
                     <input type="radio" name="functionType" value="other" id="other">Logarithmic, Trigonometric, or Exponential Function
                 </div>
 				<br />
-
                 <div id="xycoordinates" class="regularFont">
+                    Select a Color:
                     <div id="outerDiv">
-                        <button class="jscolor {valueElement:null,value:'ff0f00'}"
+                        <input type="hidden" id="hdnFuncColor" />
+                        <button class="jscolor {valueElement:'hdnFuncColor',value:'ff0f00'}"
                                 style="width:50px; height:20px;" id="functionColor"></button> Function
                     </div>
                     <div id="Div1">
-                        <button class="jscolor {valueElement:null,value:'9900CC'}"
+                        <input type="hidden" id="hdn2" />
+                        <button class="jscolor {valueElement:hdn2,value:'9900CC'}"
                                 style="width:50px; height:20px;" id="derivColor"></button> First Derivative
                     </div>
-                    <div id="Div3">                        
-                        <button class="jscolor {valueElement:null,value:'336600'}"
+                    <div id="Div3">                 
+                        <input type="hidden" id="hdn3" />       
+                        <button class="jscolor {valueElement:hdn3,value:'336600'}"
                                 style="width:50px; height:20px;" id="2derivColor"></button> Second Derivative
                     </div>
                 </div>
+                <div id="inputStyle">
+                    <p class="regularFont">Enter a Function to Graph:</p>
+                    <span class="regularFont">f(x) = </span><input type="text" id="inputField">
+                    <!-- <div>Relative Extremum:  </div><div id="extrema"></div> -->
+                    <!-- The math expression will be plotted on this Canvas. -->
+                    <input type="button" id="btnGraph" value="Graph Function" />
+                    <input type="button" id="btnClear" value="Clear Graph" />
+                </div>
+
 			</div>
 		</div>
 	</div>
 	<div id="footer">
-		<p>-Shirlyn Prabahar</p>
+		<p class="regularFont">Key to Entering Functions: <br />
+            Enter log(x) to graph ln(x) <br />
+            Enter log(x, b) to graph log base b <br />
+            Coefficients: 3*x instead of 3x
+        </p>
 	</div>
 
 </body>
