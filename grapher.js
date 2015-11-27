@@ -196,13 +196,14 @@ $(function () {
         radius = 10;
         for (var i = xMin; i < xMax; i = i + 0.05) { //change increment value
             var derivative = calculateDerivative(i);
-            if (Math.abs(derivative) < 0.0005) { //accounts for floating point error (ish)
+            if (Math.abs(derivative) < 0.05) { //accounts for floating point error (ish)
                 var secondDeriv = calculateSecondDerivative(i);
                 if (secondDeriv > 0) { //if is rel min
                     x = Math.round(i * 10) / 10;
                     y = evaluateMathExpr(x);
                     xVal = (-xMin + x) * canvas.width / (xMax - xMin); //mapped x
                     yVal = (-yMin + y) * canvas.height / (yMax - yMin); //mapped y
+                    yVal = 600 - yVal; //flips it to match canvas coordinates
                     //draw circle around this point
                     c.beginPath();
                     c.arc(xVal, yVal, radius, 0, 2 * Math.PI, false); //draws circle of radius centered at (xVal, yVal)
@@ -214,6 +215,8 @@ $(function () {
                     y = evaluateMathExpr(x);
                     xVal = (-xMin + x) * canvas.width / (xMax - xMin); //mapped x
                     yVal = (-yMin + y) * canvas.height / (yMax - yMin); //mapped y
+                    yVal = 600 - yVal; //flips it to match canvas coordinates
+
                     console.log('x: ' + xVal + ' y = ' + yVal);
                     //draw circle around this point
                     c.beginPath();
@@ -252,7 +255,7 @@ $(function () {
                 //if concave down
                 //draws rectangle of width 1 and canvas height
                 //c.rect(xVal, 0, (xVal + 1), canvas.height);
-                c.fillStyle = "rgba(0,0,255,0.3)";
+                c.fillStyle = "rgba(0,0,255,0.1)";
                 c.fillRect(xVal, 0, width, canvas.height);
             }
 
@@ -261,7 +264,7 @@ $(function () {
                 //if concave up
                 //draws rectangle of width 1 and canvas height
                 //c.rect(xVal, 0, (xVal + 1), canvas.height);
-                c.fillStyle = "rgba(255,0,0,0.3)";
+                c.fillStyle = "rgba(255,0,0,0.1)";
                 c.fillRect(xVal, 0, width, canvas.height);
             }
 
@@ -398,8 +401,8 @@ $(function () {
             drawCurve(false, '#' + $('#hdn2').val(), false); //graphs first derivative
             drawCurve(false, '#' + $('#hdn3').val(), true); //graphs second derivative
 
-            //extrema(); //highlights extrema
-            //concavity(); //marks concavity + inflection points (theoretically)
+            extrema(); //highlights extrema
+            concavity(); //marks concavity + inflection points (theoretically)
         }
 
     });
