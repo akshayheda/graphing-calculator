@@ -12,14 +12,12 @@ $(function () {
         c.opacity = 0.9,
         c.fill(),
         */
-
-        // 'n' is the number of discrete points used to approximate the 
-        // continuous math curve defined by the math expression.
-        // set equal to number of pixels of canvas
+        // n is number
+        // set equal to number of pixels of canvas for optimal viewing
         n = 1000,
 
-        // Define the math "window", which is the visible region in 
-        // "math coordinates" that gets projected onto the Canvas.
+        // Define the user's viewing window, to use when graphing
+        //Add functionality to change this later
         xMin = -20,
         xMax = 20,
         yMin = -20,
@@ -36,7 +34,7 @@ $(function () {
             x: 0
         },
 
-
+        //expression as a tree
         tree;
 
     // Sets the value of 'expr' and re-parses the expression into 'tree'.
@@ -121,7 +119,7 @@ $(function () {
 
             //if function to graph is f(x)
             if (yesNo == true) {
-                mathY = evaluateMathExpr(mathX);
+                mathY = evalExpr(mathX);
             }
                 //if function to graph is f'(x)
             else if (yesNo == false && isSecond == false) {
@@ -160,7 +158,7 @@ $(function () {
 
     // Evaluates the current math expression 
     // Returns a Y coordinate
-    function evaluateMathExpr(mathX) {
+    function evalExpr(mathX) {
 
         // Set values on the scope visible inside the math expression.
         scope.x = mathX;
@@ -173,7 +171,7 @@ $(function () {
     function calculateDerivative(x) {
         //operates on assumption that f(x) = expr
         var h = 0.00001;
-        var derivative = (evaluateMathExpr(x + h) - evaluateMathExpr(x - h)) / (2 * h); //applied difference quotient
+        var derivative = (evalExpr(x + h) - evalExpr(x - h)) / (2 * h); //applied difference quotient
         var result = Math.round(derivative * 100000) / 100000; //rounds answer to nearest 6th digit
         //console.log(result); //displays approximate derivative in console //To be removed soon
         return result;
@@ -181,12 +179,12 @@ $(function () {
 
     function calculateSecondDerivative(x) {
         //operates on assumption that f(x) = expr
-        //differentiates first derivative
-        var h = 0.001;
+        //takes derivative of the first derivative
+        var h = 0.0001;
         //var secondDerivative = calculateDerivative(x + h);
         var secondDerivative = (calculateDerivative(x + h) - calculateDerivative(x - h)) / (2 * h); //applied difference quotient
-        var result = Math.round(secondDerivative * 10000) / 10000; //rounds answer to 4th digit
-        //console.log(result); //displays approximate derivative in console //To be removed soon
+        var result = Math.round(secondDerivative * 1000) / 1000; //rounds answer to 4th digit
+        //console.log(result); //displays approximate derivative in console
         return result;
     }
 
@@ -200,7 +198,7 @@ $(function () {
                 var secondDeriv = calculateSecondDerivative(i);
                 if (secondDeriv > 0) { //if is rel min
                     x = Math.round(i * 10) / 10;
-                    y = evaluateMathExpr(x);
+                    y = evalExpr(x);
                     xVal = (-xMin + x) * canvas.width / (xMax - xMin); //mapped x
                     yVal = (-yMin + y) * canvas.height / (yMax - yMin); //mapped y
                     yVal = 600 - yVal; //flips it to match canvas coordinates
@@ -212,12 +210,12 @@ $(function () {
                 }
                 else if (secondDeriv < 0) { //if is rel max
                     x = Math.round(i * 10) / 10;
-                    y = evaluateMathExpr(x);
+                    y = evalExpr(x);
                     xVal = (-xMin + x) * canvas.width / (xMax - xMin); //mapped x
                     yVal = (-yMin + y) * canvas.height / (yMax - yMin); //mapped y
                     yVal = 600 - yVal; //flips it to match canvas coordinates
 
-                    console.log('x: ' + xVal + ' y = ' + yVal);
+                    //console.log('x: ' + xVal + ' y = ' + yVal);
                     //draw circle around this point
                     c.beginPath();
                     c.arc(xVal, yVal, radius, 0, 2 * Math.PI, false); //draws circle of radius centered at (xVal, yVal)
@@ -237,21 +235,24 @@ $(function () {
     function concavity() { //assuming f(x) == expr
         var xVal;
         var width = (0.05) * canvas.width / (xMax - xMin);
-        for (var i = xMin; i < xMax; i += 0.05){ //every 0.05 
+        var previous = calculateSecondDerivative(xMin - 0.01);
+        for (var i = xMin; i < xMax; i += 0.05) { //every 0.05 
             xVal = (-xMin + i) * canvas.width / (xMax - xMin); //mapped x (shifts over + multiplies w/ proportions)
             var secondDeriv = calculateSecondDerivative(i); //secondDerivative at x=i
-            //at inflection point
-            if (Math.abs(secondDeriv) < 0.0000000000001) { //accounts for floating point arithmetic error, may need to be changed
+            if ((nextVal < 0 && prevVal < 0) || (nextVal > 0 && prevVal > 0)) {
+                //do nothing
+            }
+                //if different signs
+            else {
                 //at inflection point, should draw line
                 c.beginPath();
                 c.moveTo(xVal, 0);
                 c.lineTo(xVal, canvas.height);
                 c.stroke();
-                console.log(xVal);
-                console.log(secondDeriv);
+
             }
 
-            else if (secondDeriv < 0) {
+            if (secondDeriv < 0) {
                 //if concave down
                 //draws rectangle of width 1 and canvas height
                 //c.rect(xVal, 0, (xVal + 1), canvas.height);
@@ -267,6 +268,7 @@ $(function () {
                 c.fillStyle = "rgba(255,0,0,0.1)";
                 c.fillRect(xVal, 0, width, canvas.height);
             }
+            var previous = secondDeriv;
 
         }
 
@@ -321,20 +323,19 @@ $(function () {
         var numeratorZeroes = 0;
     }
 
-    var iterations = 0; //for the next recursive method
+    var iterations = 0; //for the function newtonZero
     //recursive function, applies newton's method taking value for previous guess
-    //parameters: first guess, function, derivative of function
-    //called by function allZeroes
-    function calculateZero(prevGuess) {
+    //NO LONGER USED
+    function newtonZero(prevGuess) {
         //console.log(expr);
         var nextGuess; //x1 in newton's
         var derivative = calculateDerivative(prevGuess);
         var x;  //rounded x value
         var y;  //rounded y value
 
-        nextGuess = prevGuess - evaluateMathExpr(prevGuess) / derivative; //using the formula for newton's method
+        nextGuess = prevGuess - evalExpr(prevGuess) / derivative; //using the formula for newton's method
 
-        var fvalGuess = evaluateMathExpr(prevGuess);//evaluateMathExpr(nextGuess);
+        var fvalGuess = evalExpr(prevGuess);//evalExpr(nextGuess);
         //console.log(Math.round(nextGuess * 10000) / 10000);
         y = Math.round(fvalGuess * 100000) / 100000; //rounding y val to 6th place
 
@@ -345,29 +346,55 @@ $(function () {
         else if (iterations < 20000 && Math.abs(y) > 0.00000001) { //if function val is not close and 
             //if is less than 20000th iteration
             ++iterations;
-            return (calculateZero(nextGuess)); //repeats newton's method until approximation is close enough
+            return (newtonZero(nextGuess)); //repeats newton's method until approximation is close enough
         }
         else { //if hit 20000 iterations but is still not near zero, return value //wait but what if it hasn't converged yet?
             x = Math.round(nextGuess * 10000) / 10000;
             return x; //returns solution or whatever value arrived at after set number of iterations.   
-            ///NEED TO BE ABLE TO IDENTIFY WHEN DOES NOT CONVERGE
         }
     }
 
     var zeroes = [];
+    //a function to calculate zeroes by checking if sign has changed
+    function calculateZero(prevGuess, step, max) {
+        for (var i = step; i <= max; i += step) {
+            var prevX = prevGuess + i - step;
+            var nextX = prevGuess + i;
+            //calculates previous y value
+            var prevVal = evalExpr(prevX);
+            //calculates next y value
+            var nextVal = evalExpr(nextX);
+            if (nextVal == 0) {
+                zeroes.push(nextX);
+            }
+            else if (prevVal == 0) {
+                //do nothing as sign can't have changed
+            }
+                //if same sign
+            else if ((nextVal < 0 && prevVal < 0) || (nextVal > 0 && prevVal > 0)) {
+                //do nothing
+            }
+                //if different signs
+            else {
+                //add to zeroes array and continue
+                zeroes.push(prevGuess + i);
+            }
+        }
 
-    //calculates all zeroes and assigns = zeroes[];
-    //calls function calculateZero for this
-    //assigns zeroes to (global?) array zeroes
-    //has lots of problems b/c array is full of repeat values
+    }
+
+
+    //calculates all zeroes and assigns to zeroes[];
     function allZeroes() {
-        //checks zeroes for each point on graph; needs to be optimized
+        //obsolete way, using newton's method
+        /*
         var nextZero;
         var current = 1;
         for (var i = xMin; i <= xMax ; i = i + 0.5) {
-            nextZero = calculateZero(i);
+            nextZero = newtonZero(i);
             //if a previous zero has been calculated and the difference between them is large enough
             if (zeroes[current - 1] != null && Math.abs(zeroes[current - 1]) - Math.abs(nextZero) > 0.005) {
+                console.log(Math.abs(zeroes[current - 1]) - Math.abs(nextZero));
                 zeroes.push(nextZero); //adds the root to array of zeroes
                 ++current;
             }
@@ -375,9 +402,13 @@ $(function () {
             else if (zeroes[current - 1] == null && !(nextZero.isNaN)) {
                 zeroes.push(nextZero);
                 ++current;
+
             }
             //current keeps track of which cell of array we're on
         }
+        */
+        //method using calculateZero()
+        calculateZero(-20, 0.5, 40);
 
     }
 
