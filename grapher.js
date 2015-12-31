@@ -235,7 +235,7 @@ $(function () {
     //if second deriv is REALLY REALLY CLOSE to zero, should draw horizontal line or similar marker.
     //takes val of x coordinate and corresponding second derivative as parameter
     function concavity() { //assuming f(x) == expr
-        console.log("Hi");
+        //console.log("Hi");
         var xVal;
         var width = (0.05) * canvas.width / (xMax - xMin);
         var previous = calculateSecondDerivative(xMin - 0.01);
@@ -280,25 +280,40 @@ $(function () {
         //unless is zero, when horiz line should be drawn
     }
 
+    //var numerator;
     //function to solve for when the denominator = 0;
     //assumes expression to work with is assigned to expr, sets expr == denominator of function
     function calculateAsymptotes() {
         var denominator;
+        var original = expr;
         for (var i = 0; i < expr.length; i++) {
             if (expr.charAt(i) == '/') {
+                var numerator = expr.substring(0, i - 1);
                 denominator = expr.substring(i + 1);
                 break;
             }
         }
         setExpr(denominator);
         allZeroes();
+        setExpr(original);
         for (var j = 0; j < zeroes.length; j++) { //draws a vertical line for every place where function is undefined
-            var currentPt = (xMax + zeroes[j]) * canvas.width / (xMax - xMin); //find xVal
-            c.moveTo(currentPt, 0);
-            c.lineTo(currentPt, canvas.height);
-        }
-        c.stroke();
+            //if is removable discontinuity
+            if (removable(zeroes[j])) {
+                var currentPt = (xMax + zeroes[j]) * canvas.width / (xMax - xMin); //find x coordinate
+                var currentY = ((yMax - evalExpr(zeroes[j] + 0.00001)) * canvas.height) / (yMax - yMin); //find y coordinate
+                console.log(currentPt, currentY);
+                c.beginPath();
+                c.arc(currentPt, currentY, 3, 0, 2 * Math.PI, false);
+                c.stroke();
 
+            } else {
+                var currentPt = (xMax + zeroes[j]) * canvas.width / (xMax - xMin); //find xVal
+                c.beginPath();
+                c.moveTo(currentPt, 0);
+                c.lineTo(currentPt, canvas.height);
+                c.stroke();
+            }            
+        }
     }
 
     //precalculates symbolic derivatives and displays them in divs
@@ -320,10 +335,18 @@ $(function () {
         // var g = result2.buildFunction();
     }
 
-    //calculates removable discontinuities by evaluating zeroes of numerator and denominator and checking for same values
-    function removable(numerator) {
-        setExpr(numerator);
-        var numeratorZeroes = 0;
+    //calculates if discontinuity at xVal is removable or not, returns boolean
+    function removable(xVal) {
+        var diff1 = Math.abs(evalExpr(xVal - 0.1) - evalExpr(xVal - 0.01));
+        var diff2 = Math.abs(evalExpr(xVal - 0.01) - evalExpr(xVal - 0.001));
+        var diff3 = Math.abs(evalExpr(xVal + 0.1) - evalExpr(xVal + 0.01));
+        var diff4 = Math.abs(evalExpr(xVal + 0.01) - evalExpr(xVal + 0.001));
+        if (diff1 > diff2 && diff3 > diff4) {
+            return true;
+        }
+        else return false;
+        
+        
     }
 
     var iterations = 0; //for the function newtonZero
