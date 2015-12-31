@@ -192,9 +192,10 @@ $(function () {
     function extrema() {
         var x, y, xVal, yVal, radius;
         radius = 10;
+        var previous = calculateDerivative(xMin - 0.01);
         for (var i = xMin; i < xMax; i = i + 0.05) { //change increment value
             var derivative = calculateDerivative(i);
-            if (Math.abs(derivative) < 0.05) { //accounts for floating point error (ish)
+            if ((derivative < 0 && previous > 0) || (derivative > 0 && previous < 0) || derivative == 0) { 
                 var secondDeriv = calculateSecondDerivative(i);
                 if (secondDeriv > 0) { //if is rel min
                     x = Math.round(i * 10) / 10;
@@ -222,8 +223,9 @@ $(function () {
                     c.fillStyle = 'rgba(0,255,0,0.3)';
                     c.fill();
                 }
-
             }
+            var previous = derivative;
+
         }
     }
 
@@ -233,14 +235,30 @@ $(function () {
     //if second deriv is REALLY REALLY CLOSE to zero, should draw horizontal line or similar marker.
     //takes val of x coordinate and corresponding second derivative as parameter
     function concavity() { //assuming f(x) == expr
+        console.log("Hi");
         var xVal;
         var width = (0.05) * canvas.width / (xMax - xMin);
         var previous = calculateSecondDerivative(xMin - 0.01);
         for (var i = xMin; i < xMax; i += 0.05) { //every 0.05 
             xVal = (-xMin + i) * canvas.width / (xMax - xMin); //mapped x (shifts over + multiplies w/ proportions)
             var secondDeriv = calculateSecondDerivative(i); //secondDerivative at x=i
-            if ((nextVal < 0 && prevVal < 0) || (nextVal > 0 && prevVal > 0)) {
-                //do nothing
+            if ((secondDeriv < 0 && previous < 0) || (secondDeriv > 0 && previous > 0)) {
+                if (secondDeriv < 0) {
+                    //if concave down
+                    //draws rectangle of width 1 and canvas height
+                    //c.rect(xVal, 0, (xVal + 1), canvas.height);
+                    c.fillStyle = "rgba(0,0,255,0.1)";
+                    c.fillRect(xVal, 0, width, canvas.height);
+                }
+
+
+                else if (secondDeriv > 0) {
+                    //if concave up
+                    //draws rectangle of width 1 and canvas height
+                    //c.rect(xVal, 0, (xVal + 1), canvas.height);
+                    c.fillStyle = "rgba(255,0,0,0.1)";
+                    c.fillRect(xVal, 0, width, canvas.height);
+                }
             }
                 //if different signs
             else {
@@ -252,22 +270,7 @@ $(function () {
 
             }
 
-            if (secondDeriv < 0) {
-                //if concave down
-                //draws rectangle of width 1 and canvas height
-                //c.rect(xVal, 0, (xVal + 1), canvas.height);
-                c.fillStyle = "rgba(0,0,255,0.1)";
-                c.fillRect(xVal, 0, width, canvas.height);
-            }
-
-
-            else if (secondDeriv > 0) {
-                //if concave up
-                //draws rectangle of width 1 and canvas height
-                //c.rect(xVal, 0, (xVal + 1), canvas.height);
-                c.fillStyle = "rgba(255,0,0,0.1)";
-                c.fillRect(xVal, 0, width, canvas.height);
-            }
+            
             var previous = secondDeriv;
 
         }
