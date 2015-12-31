@@ -172,7 +172,7 @@ $(function () {
         //operates on assumption that f(x) = expr
         var h = 0.00001;
         var derivative = (evalExpr(x + h) - evalExpr(x - h)) / (2 * h); //applied difference quotient
-        var result = Math.round(derivative * 100000) / 100000; //rounds answer to nearest 6th digit
+        var result = Math.round(derivative * 100000000) / 100000000; //rounds answer
         //console.log(result); //displays approximate derivative in console //To be removed soon
         return result;
     }
@@ -183,7 +183,7 @@ $(function () {
         var h = 0.0001;
         //var secondDerivative = calculateDerivative(x + h);
         var secondDerivative = (calculateDerivative(x + h) - calculateDerivative(x - h)) / (2 * h); //applied difference quotient
-        var result = Math.round(secondDerivative * 1000) / 1000; //rounds answer to 4th digit
+        var result = Math.round(secondDerivative * 100000000) / 100000000; //rounds answer
         //console.log(result); //displays approximate derivative in console
         return result;
     }
@@ -232,7 +232,7 @@ $(function () {
     //evaluates second derivative at each x
     //if second deriv > 0, colors one color
     //if second deriv < 0, colors a different color
-    //if second deriv is REALLY REALLY CLOSE to zero, should draw horizontal line or similar marker.
+    //if second deriv has just changed from negative to positive, marks it as inflection point
     //takes val of x coordinate and corresponding second derivative as parameter
     function concavity() { //assuming f(x) == expr
         //console.log("Hi");
@@ -261,16 +261,15 @@ $(function () {
                 }
             }
                 //if different signs
-            else {
-                //at inflection point, should draw line
+            else if ((secondDeriv < 0 && previous > 0) || (secondDeriv > 0 && previous < 0)) {
+                //at inflection point, should draw circle
+                var yVal = (-(evalExpr(i) - yMax) * canvas.height) / (yMax - yMin);
+                console.log(xVal, yVal);
                 c.beginPath();
-                c.moveTo(xVal, 0);
-                c.lineTo(xVal, canvas.height);
-                c.stroke();
-
-            }
-
-            
+                c.arc(xVal, yVal, 3, 0, 2 * Math.PI, false); //draws circle of radius centered at (xVal, yVal)
+                c.fillStyle = 'rgba(0,120,125,0.3)';
+                c.fill();
+            }            
             var previous = secondDeriv;
 
         }
@@ -299,8 +298,8 @@ $(function () {
         for (var j = 0; j < zeroes.length; j++) { //draws a vertical line for every place where function is undefined
             //if is removable discontinuity
             if (removable(zeroes[j])) {
-                var currentPt = (xMax + zeroes[j]) * canvas.width / (xMax - xMin); //find x coordinate
-                var currentY = ((yMax - evalExpr(zeroes[j] + 0.00001)) * canvas.height) / (yMax - yMin); //find y coordinate
+                var currentPt = (-xMin + zeroes[j]) * canvas.width / (xMax - xMin); //find x coordinate
+                var currentY = ((-yMax - evalExpr(zeroes[j] + 0.00001)) * canvas.height) / (yMax - yMin); //find y coordinate
                 console.log(currentPt, currentY);
                 c.beginPath();
                 c.arc(currentPt, currentY, 3, 0, 2 * Math.PI, false);
