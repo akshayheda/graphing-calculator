@@ -78,9 +78,9 @@ $(function () {
 
     generatePlane();
 
-    // Parameter yesNo is set to yes for f(x) and no for f'(x) and f''(x)
+    
     // Plots the math expression curve on the canvas.
-    function drawCurve(yesNo, paint, isSecond) {
+    function drawCurve(color, current) {
         // These variables are used inside the for loop.
         var i,
 
@@ -118,22 +118,21 @@ $(function () {
             // mathY = f(mathX)
 
             //if function to graph is f(x)
-            if (yesNo == true) {
+            if (current == 1) {
                 mathY = evalExpr(mathX);
             }
                 //if function to graph is f'(x)
-            else if (yesNo == false && isSecond == false) {
+            else if (current == 2) {
                 mathY = calculateDerivative(mathX);
             }
                 //if function to graph is f"(x)
-            else if (yesNo == false && isSecond == true) {
+            else if (current == 3) {
                 mathY = calculateSecondDerivative(mathX);
                 //concavity(mathX, mathY);
             }
 
 
-            // Project 'mathY' from the interval ['yMin', 'yMax']
-            // to the interval [0, 1].
+            // Maps to canvas coordinates
             percentY = (mathY - yMin) / (yMax - yMin);
 
             // Flip Y to match canvas coordinates.
@@ -143,7 +142,7 @@ $(function () {
             xPixel = percentX * canvas.width;
             yPixel = percentY * canvas.height;
 
-            c.strokeStyle = paint;
+            c.strokeStyle = color;
 
             // The first time this line of code is run, it defines the first point
             // in the path, acting exactly like 'c.moveTo(xPixel, yPixel);'
@@ -273,10 +272,6 @@ $(function () {
             var previous = secondDeriv;
 
         }
-
-        //should now draw a rectangle of height canvas.height and width canvas.width/n 
-        //color depends on sign of second derivative
-        //unless is zero, when horiz line should be drawn
     }
 
     //var numerator;
@@ -293,7 +288,7 @@ $(function () {
             }
         }
         setExpr(denominator);
-        allZeroes();
+        calculateZero(-20, 0.5, 40);
         setExpr(original);
         for (var j = 0; j < zeroes.length; j++) { //draws a vertical line for every place where function is undefined
             //if is removable discontinuity
@@ -410,6 +405,7 @@ $(function () {
 
 
     //calculates all zeroes and assigns to zeroes[];
+    //NOT USED
     function allZeroes() {
         //obsolete way, using newton's method
         /*
@@ -433,7 +429,6 @@ $(function () {
         }
         */
         //method using calculateZero()
-        calculateZero(-20, 0.5, 40);
 
     }
 
@@ -443,7 +438,7 @@ $(function () {
         //call function to calculate derivatives
 
         setExpr($('#inputField').val());   //graphs main function
-        drawCurve(true, '#' + $('#hdnFuncColor').val(), false); //'#ff0f00', false);
+        drawCurve('#' + $('#hdnFuncColor').val(), 1); //'#ff0f00', false);
 
         generatePlane(); //draws plane again on top of function
 
@@ -454,8 +449,8 @@ $(function () {
 
         }
         else if ($('#polynomial').is(':checked') || $('#other').is(':checked')) {
-            drawCurve(false, '#' + $('#hdn2').val(), false); //graphs first derivative
-            drawCurve(false, '#' + $('#hdn3').val(), true); //graphs second derivative
+            drawCurve('#' + $('#hdn2').val(), 2); //graphs first derivative
+            drawCurve('#' + $('#hdn3').val(), 3); //graphs second derivative
 
             extrema(); //highlights extrema
             concavity(); //marks concavity + inflection points (theoretically)
@@ -463,4 +458,3 @@ $(function () {
 
     });
 });
-
