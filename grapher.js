@@ -12,9 +12,9 @@ $(function () {
         c.opacity = 0.9,
         c.fill(),
         */
-        // n is number
-        // set equal to number of pixels of canvas for optimal viewing
-        n = 1000,
+        // n is number of line segments to be graphed
+        // change based on function being graphed
+        n,
 
         // Define the user's viewing window, to use when graphing
         //Add functionality to change this later
@@ -78,7 +78,7 @@ $(function () {
 
     generatePlane();
 
-    
+
     // Plots the math expression curve on the canvas.
     function drawCurve(color, current) {
         // These variables are used inside the for loop.
@@ -148,8 +148,10 @@ $(function () {
             // Subsequently, this line of code adds a line segment to the curve path
             // between the previous and current points.
             c.lineTo(xPixel, yPixel);
-            if (current == 3) {
-                //console.log(mathX, mathY, xPixel, yPixel);
+
+            
+            if (current == 1) {
+                console.log("x: "+xPixel, "y: "+yPixel);
             }
 
         }
@@ -174,7 +176,7 @@ $(function () {
         //operates on assumption that f(x) = expr
         var h = 0.00001;
         var derivative = (evalExpr(x + h) - evalExpr(x - h)) / (2 * h); //applied difference quotient
-        var result = Math.round(derivative * 100000000) / 100000000; //rounds answer
+        var result = Math.round(derivative * 1000000) / 1000000; //rounds answer
         //console.log(result); //displays approximate derivative in console //To be removed soon
         return result;
     }
@@ -185,7 +187,7 @@ $(function () {
         var h = 0.0001;
         //var secondDerivative = calculateDerivative(x + h);
         var secondDerivative = (calculateDerivative(x + h) - calculateDerivative(x - h)) / (2 * h); //applied difference quotient
-        var result = Math.round(secondDerivative * 100000000) / 100000000; //rounds answer
+        var result = Math.round(secondDerivative * 10000000) / 10000000; //rounds answer
         //console.log(result); //displays approximate derivative in console
         return result;
     }
@@ -197,7 +199,7 @@ $(function () {
         var previous = calculateDerivative(xMin - 0.01);
         for (var i = xMin; i < xMax; i = i + 0.05) { //change increment value
             var derivative = calculateDerivative(i);
-            if ((derivative < 0 && previous > 0) || (derivative > 0 && previous < 0) || derivative == 0) { 
+            if ((derivative < 0 && previous > 0) || (derivative > 0 && previous < 0) || derivative == 0) {
                 var secondDeriv = calculateSecondDerivative(i);
                 if (secondDeriv > 0) { //if is rel min
                     x = Math.round(i * 10) / 10;
@@ -246,24 +248,19 @@ $(function () {
         for (var i = xMin; i < xMax; i += 0.05) { //every 0.05 
             xVal = (-xMin + i) * canvas.width / (xMax - xMin); //mapped x (shifts over + multiplies w/ proportions)
             var secondDeriv = calculateSecondDerivative(i); //secondDerivative at x=i
-            console.log(i, secondDeriv);
-            //console.log(secondDeriv, i);
+
             if ((secondDeriv < 0 && previous < 0) || (secondDeriv > 0 && previous > 0)) {
                 if (secondDeriv < 0) {
                     //if concave down
                     //draws rectangle of width 1 and canvas height
-                    //c.rect(xVal, 0, (xVal + 1), canvas.height);
-                    //console.log("concave down: rgba(" + $('#hdn7').val() + ",0.1)");
-                    c.fillStyle = "rgba(" + $('#hdn7').val() + ",0.3)"; 
+                    c.fillStyle = "rgba(" + $('#hdn7').val() + ",0.3)";
                     c.fillRect(xVal, 0, width, canvas.height);
                 }
 
 
                 else if (secondDeriv > 0) {
                     //if concave up
-                    //draws rectangle of width 1 and canvas height
-                    //c.rect(xVal, 0, (xVal + 1), canvas.height);
-                    //console.log("concave up: rgba(" + $('#hdn6').val() + ",0.1)");
+                    //draws rectangle of width 1 and canvas height                   
                     c.fillStyle = "rgba(" + $('#hdn6').val() + ",0.3)";
                     c.fillRect(xVal, 0, width, canvas.height);
                 }
@@ -274,10 +271,9 @@ $(function () {
                 var yVal = (-(evalExpr(i) - yMax) * canvas.height) / (yMax - yMin);
                 c.beginPath();
                 c.arc(xVal, yVal, 5, 0, 2 * Math.PI, false); //draws circle of radius centered at (xVal, yVal)
-                //console.log("inflection: rgba(" + $('#hdn4').val() + ",0.4)");
                 c.fillStyle = "rgba(" + $('#hdn4').val() + ",0.5)";
                 c.fill();
-            }            
+            }
             var previous = secondDeriv;
 
         }
@@ -304,7 +300,7 @@ $(function () {
             if (removable(zeroes[j])) {
                 var currentPt = (-xMin + zeroes[j]) * canvas.width / (xMax - xMin); //find x coordinate
                 var currentY = ((yMax - evalExpr(zeroes[j] + 0.00000001)) * canvas.height) / (yMax - yMin); //find y coordinate
-                console.log(zeroes[j], evalExpr(zeroes[j]+0.000001), currentPt, currentY);
+                console.log(zeroes[j], evalExpr(zeroes[j] + 0.000001), currentPt, currentY);
                 c.beginPath();
                 c.arc(currentPt, currentY, 3, 0, 2 * Math.PI, false);
                 c.stroke();
@@ -315,7 +311,7 @@ $(function () {
                 c.moveTo(currentPt, 0);
                 c.lineTo(currentPt, canvas.height);
                 c.stroke();
-            }            
+            }
         }
     }
 
@@ -348,8 +344,8 @@ $(function () {
             return true;
         }
         else return false;
-        
-        
+
+
     }
 
     var iterations = 0; //for the function newtonZero
@@ -417,7 +413,7 @@ $(function () {
     //NOT USED
     function allZeroes() {
         //obsolete way, using newton's method
-        
+
         var nextZero;
         var current = 1;
         for (var i = xMin; i <= xMax ; i = i + 0.5) {
@@ -436,7 +432,7 @@ $(function () {
             }
             //current keeps track of which cell of array we're on
         }
-        
+
         //method using calculateZero()
 
     }
@@ -447,23 +443,54 @@ $(function () {
         //call function to calculate derivatives
 
         setExpr($('#inputField').val());   //graphs main function
-        drawCurve('#' + $('#hdnFuncColor').val(), 1); //'#ff0f00', false);
-
-        generatePlane(); //draws plane again on top of function
+        
 
 
         //setExpr($('#derivResult').text()); //graphs second derivative
         if ($('#rational').is(':checked')) {
             calculateAsymptotes(); //calculates asymptotes of rational function
+            
+            n = 1000;
+
+            drawCurve('#' + $('#hdnFuncColor').val(), 1); //'#ff0f00', false);
+
+            generatePlane(); //draws plane again on top of function
 
         }
-        else if ($('#polynomial').is(':checked') || $('#other').is(':checked')) {
+        else if ($('#polynomial').is(':checked')) {
+            n = 1000;
+            drawCurve('#' + $('#hdnFuncColor').val(), 1); //'#ff0f00', false);
+
+            generatePlane(); //draws plane again on top of function
+
+
             drawCurve('#' + $('#hdn2').val(), 2); //graphs first derivative
             drawCurve('#' + $('#hdn3').val(), 3); //graphs second derivative
 
             extrema(); //highlights extrema
-            concavity(); //marks concavity + inflection points (theoretically)
+            concavity(); //marks concavity + inflection points 
+        }
+        else if ($('#other').is(':checked')) {
+            n = 500;
+            drawCurve('#' + $('#hdnFuncColor').val(), 1); //'#ff0f00', false);
+
+            generatePlane(); //draws plane again on top of function
+
+            drawCurve('#' + $('#hdn2').val(), 2); //graphs first derivative
+            drawCurve('#' + $('#hdn3').val(), 3); //graphs second derivative
+
+            extrema(); //highlights extrema
+            concavity(); //marks concavity + inflection points 
         }
 
     });
+
+    /*$('#btnClear').click(function () {
+        c.clearRect(0, 0, canvas.width, canvas.height);
+        generatePlane();
+
+        $('#btnGraph').click();
+
+    });
+    */
 });
