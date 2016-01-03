@@ -149,7 +149,7 @@ $(function () {
             // between the previous and current points.
             c.lineTo(xPixel, yPixel);
             if (current == 3) {
-                console.log(xPixel, yPixel);
+                //console.log(mathX, mathY, xPixel, yPixel);
             }
 
         }
@@ -271,7 +271,7 @@ $(function () {
             else if ((secondDeriv < 0 && previous > 0) || (secondDeriv > 0 && previous < 0)) {
                 //at inflection point, should draw circle
                 var yVal = (-(evalExpr(i) - yMax) * canvas.height) / (yMax - yMin);
-                //console.log(xVal, yVal);
+                //console.log(i, evalExpr(i));
                 c.beginPath();
                 c.arc(xVal, yVal, 5, 0, 2 * Math.PI, false); //draws circle of radius centered at (xVal, yVal)
                 //console.log("inflection: rgba(" + $('#hdn4').val() + ",0.4)");
@@ -303,8 +303,8 @@ $(function () {
             //if is removable discontinuity
             if (removable(zeroes[j])) {
                 var currentPt = (-xMin + zeroes[j]) * canvas.width / (xMax - xMin); //find x coordinate
-                var currentY = ((-yMax - evalExpr(zeroes[j] + 0.00001)) * canvas.height) / (yMax - yMin); //find y coordinate
-                //console.log(currentPt, currentY);
+                var currentY = ((yMax - evalExpr(zeroes[j] + 0.00000001)) * canvas.height) / (yMax - yMin); //find y coordinate
+                console.log(zeroes[j], evalExpr(zeroes[j]+0.000001), currentPt, currentY);
                 c.beginPath();
                 c.arc(currentPt, currentY, 3, 0, 2 * Math.PI, false);
                 c.stroke();
@@ -417,7 +417,7 @@ $(function () {
     //NOT USED
     function allZeroes() {
         //obsolete way, using newton's method
-        /*
+        
         var nextZero;
         var current = 1;
         for (var i = xMin; i <= xMax ; i = i + 0.5) {
@@ -436,7 +436,7 @@ $(function () {
             }
             //current keeps track of which cell of array we're on
         }
-        */
+        
         //method using calculateZero()
 
     }
