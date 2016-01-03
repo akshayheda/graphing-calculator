@@ -94,7 +94,7 @@ $(function () {
             // These are values in math coordinates.
             mathX, mathY;
 
-        if (yesNo == true) {
+        if (current == 1) {
             // Clear the canvas.
             c.clearRect(0, 0, canvas.width, canvas.height);
         }
@@ -128,7 +128,6 @@ $(function () {
                 //if function to graph is f"(x)
             else if (current == 3) {
                 mathY = calculateSecondDerivative(mathX);
-                //concavity(mathX, mathY);
             }
 
 
@@ -149,6 +148,10 @@ $(function () {
             // Subsequently, this line of code adds a line segment to the curve path
             // between the previous and current points.
             c.lineTo(xPixel, yPixel);
+            if (current == 3) {
+                console.log(xPixel, yPixel);
+            }
+
         }
         // This line of code renders the curve path defined by the 'c.lineTo'
         c.stroke();
@@ -205,7 +208,8 @@ $(function () {
                     //draw circle around this point
                     c.beginPath();
                     c.arc(xVal, yVal, radius, 0, 2 * Math.PI, false); //draws circle of radius centered at (xVal, yVal)
-                    c.fillStyle = 'rgba(0,255,0,0.3)';
+                    //console.log("extrema: rgba(" + $('#hdn5').val() + ",0.3)");
+                    c.fillStyle = "rgba(" + $('#hdn5').val() + ",0.5)";
                     c.fill();
                 }
                 else if (secondDeriv < 0) { //if is rel max
@@ -219,7 +223,8 @@ $(function () {
                     //draw circle around this point
                     c.beginPath();
                     c.arc(xVal, yVal, radius, 0, 2 * Math.PI, false); //draws circle of radius centered at (xVal, yVal)
-                    c.fillStyle = 'rgba(0,255,0,0.3)';
+                    //console.log("elseif extrema: rgba(" + $('#hdn5').val() + ",0.3)");
+                    c.fillStyle = "rgba(" + $('#hdn5').val() + ",0.5)";
                     c.fill();
                 }
             }
@@ -241,12 +246,14 @@ $(function () {
         for (var i = xMin; i < xMax; i += 0.05) { //every 0.05 
             xVal = (-xMin + i) * canvas.width / (xMax - xMin); //mapped x (shifts over + multiplies w/ proportions)
             var secondDeriv = calculateSecondDerivative(i); //secondDerivative at x=i
+            //console.log(secondDeriv, i);
             if ((secondDeriv < 0 && previous < 0) || (secondDeriv > 0 && previous > 0)) {
                 if (secondDeriv < 0) {
                     //if concave down
                     //draws rectangle of width 1 and canvas height
                     //c.rect(xVal, 0, (xVal + 1), canvas.height);
-                    c.fillStyle = "rgba(0,0,255,0.1)";
+                    //console.log("concave down: rgba(" + $('#hdn7').val() + ",0.1)");
+                    c.fillStyle = "rgba(" + $('#hdn7').val() + ",0.3)"; 
                     c.fillRect(xVal, 0, width, canvas.height);
                 }
 
@@ -255,7 +262,8 @@ $(function () {
                     //if concave up
                     //draws rectangle of width 1 and canvas height
                     //c.rect(xVal, 0, (xVal + 1), canvas.height);
-                    c.fillStyle = "rgba(255,0,0,0.1)";
+                    //console.log("concave up: rgba(" + $('#hdn6').val() + ",0.1)");
+                    c.fillStyle = "rgba(" + $('#hdn6').val() + ",0.3)";
                     c.fillRect(xVal, 0, width, canvas.height);
                 }
             }
@@ -263,10 +271,11 @@ $(function () {
             else if ((secondDeriv < 0 && previous > 0) || (secondDeriv > 0 && previous < 0)) {
                 //at inflection point, should draw circle
                 var yVal = (-(evalExpr(i) - yMax) * canvas.height) / (yMax - yMin);
-                console.log(xVal, yVal);
+                //console.log(xVal, yVal);
                 c.beginPath();
-                c.arc(xVal, yVal, 3, 0, 2 * Math.PI, false); //draws circle of radius centered at (xVal, yVal)
-                c.fillStyle = 'rgba(0,120,125,0.3)';
+                c.arc(xVal, yVal, 5, 0, 2 * Math.PI, false); //draws circle of radius centered at (xVal, yVal)
+                //console.log("inflection: rgba(" + $('#hdn4').val() + ",0.4)");
+                c.fillStyle = "rgba(" + $('#hdn4').val() + ",0.5)";
                 c.fill();
             }            
             var previous = secondDeriv;
@@ -295,7 +304,7 @@ $(function () {
             if (removable(zeroes[j])) {
                 var currentPt = (-xMin + zeroes[j]) * canvas.width / (xMax - xMin); //find x coordinate
                 var currentY = ((-yMax - evalExpr(zeroes[j] + 0.00001)) * canvas.height) / (yMax - yMin); //find y coordinate
-                console.log(currentPt, currentY);
+                //console.log(currentPt, currentY);
                 c.beginPath();
                 c.arc(currentPt, currentY, 3, 0, 2 * Math.PI, false);
                 c.stroke();
