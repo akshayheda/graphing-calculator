@@ -246,6 +246,7 @@ $(function () {
         for (var i = xMin; i < xMax; i += 0.05) { //every 0.05 
             xVal = (-xMin + i) * canvas.width / (xMax - xMin); //mapped x (shifts over + multiplies w/ proportions)
             var secondDeriv = calculateSecondDerivative(i); //secondDerivative at x=i
+            console.log(i, secondDeriv);
             //console.log(secondDeriv, i);
             if ((secondDeriv < 0 && previous < 0) || (secondDeriv > 0 && previous > 0)) {
                 if (secondDeriv < 0) {
@@ -268,10 +269,9 @@ $(function () {
                 }
             }
                 //if different signs
-            else if ((secondDeriv < 0 && previous > 0) || (secondDeriv > 0 && previous < 0)) {
+            else if ((secondDeriv < 0 && previous > 0) || (secondDeriv > 0 && previous < 0) || secondDeriv == 0) {
                 //at inflection point, should draw circle
                 var yVal = (-(evalExpr(i) - yMax) * canvas.height) / (yMax - yMin);
-                //console.log(i, evalExpr(i));
                 c.beginPath();
                 c.arc(xVal, yVal, 5, 0, 2 * Math.PI, false); //draws circle of radius centered at (xVal, yVal)
                 //console.log("inflection: rgba(" + $('#hdn4').val() + ",0.4)");
