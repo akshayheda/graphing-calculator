@@ -149,11 +149,6 @@ $(function () {
             // between the previous and current points.
             c.lineTo(xPixel, yPixel);
 
-            
-            if (current == 1) {
-                console.log("x: "+xPixel, "y: "+yPixel);
-            }
-
         }
         // This line of code renders the curve path defined by the 'c.lineTo'
         c.stroke();
@@ -177,18 +172,18 @@ $(function () {
         var h = 0.00001;
         var derivative = (evalExpr(x + h) - evalExpr(x - h)) / (2 * h); //applied difference quotient
         var result = Math.round(derivative * 1000000) / 1000000; //rounds answer
-        //console.log(result); //displays approximate derivative in console //To be removed soon
         return result;
     }
 
     function calculateSecondDerivative(x) {
-        //operates on assumption that f(x) = expr
+
         //takes derivative of the first derivative
         var h = 0.0001;
-        //var secondDerivative = calculateDerivative(x + h);
+
         var secondDerivative = (calculateDerivative(x + h) - calculateDerivative(x - h)) / (2 * h); //applied difference quotient
+
         var result = Math.round(secondDerivative * 10000000) / 10000000; //rounds answer
-        //console.log(result); //displays approximate derivative in console
+
         return result;
     }
 
@@ -210,7 +205,7 @@ $(function () {
                     //draw circle around this point
                     c.beginPath();
                     c.arc(xVal, yVal, radius, 0, 2 * Math.PI, false); //draws circle of radius centered at (xVal, yVal)
-                    //console.log("extrema: rgba(" + $('#hdn5').val() + ",0.3)");
+
                     c.fillStyle = "rgba(" + $('#hdn5').val() + ",0.5)";
                     c.fill();
                 }
@@ -221,11 +216,10 @@ $(function () {
                     yVal = (-yMin + y) * canvas.height / (yMax - yMin); //mapped y
                     yVal = 600 - yVal; //flips it to match canvas coordinates
 
-                    //console.log('x: ' + xVal + ' y = ' + yVal);
                     //draw circle around this point
                     c.beginPath();
                     c.arc(xVal, yVal, radius, 0, 2 * Math.PI, false); //draws circle of radius centered at (xVal, yVal)
-                    //console.log("elseif extrema: rgba(" + $('#hdn5').val() + ",0.3)");
+
                     c.fillStyle = "rgba(" + $('#hdn5').val() + ",0.5)";
                     c.fill();
                 }
@@ -241,7 +235,7 @@ $(function () {
     //if second deriv has just changed from negative to positive, marks it as inflection point
     //takes val of x coordinate and corresponding second derivative as parameter
     function concavity() { //assuming f(x) == expr
-        //console.log("Hi");
+
         var xVal;
         var width = (0.05) * canvas.width / (xMax - xMin);
         var previous = calculateSecondDerivative(xMin - 0.01);
@@ -266,7 +260,7 @@ $(function () {
                 }
             }
                 //if different signs
-            else if ((secondDeriv < 0 && previous > 0) || (secondDeriv > 0 && previous < 0) || secondDeriv == 0) {
+            else if ((secondDeriv < 0 && previous > 0) || (secondDeriv > 0 && previous < 0) || (secondDeriv == 0)) {
                 //at inflection point, should draw circle
                 var yVal = (-(evalExpr(i) - yMax) * canvas.height) / (yMax - yMin);
                 c.beginPath();
@@ -300,7 +294,6 @@ $(function () {
             if (removable(zeroes[j])) {
                 var currentPt = (-xMin + zeroes[j]) * canvas.width / (xMax - xMin); //find x coordinate
                 var currentY = ((yMax - evalExpr(zeroes[j] + 0.00000001)) * canvas.height) / (yMax - yMin); //find y coordinate
-                console.log(zeroes[j], evalExpr(zeroes[j] + 0.000001), currentPt, currentY);
                 c.beginPath();
                 c.arc(currentPt, currentY, 3, 0, 2 * Math.PI, false);
                 c.stroke();
@@ -352,7 +345,6 @@ $(function () {
     //recursive function, applies newton's method taking value for previous guess
     //NO LONGER USED
     function newtonZero(prevGuess) {
-        //console.log(expr);
         var nextGuess; //x1 in newton's
         var derivative = calculateDerivative(prevGuess);
         var x;  //rounded x value
@@ -361,7 +353,7 @@ $(function () {
         nextGuess = prevGuess - evalExpr(prevGuess) / derivative; //using the formula for newton's method
 
         var fvalGuess = evalExpr(prevGuess);//evalExpr(nextGuess);
-        //console.log(Math.round(nextGuess * 10000) / 10000);
+
         y = Math.round(fvalGuess * 100000) / 100000; //rounding y val to 6th place
 
         if (Math.abs(y) < 0.00000001) { //when y val is really, really close to 0
@@ -420,7 +412,6 @@ $(function () {
             nextZero = newtonZero(i);
             //if a previous zero has been calculated and the difference between them is large enough
             if (zeroes[current - 1] != null && Math.abs(zeroes[current - 1]) - Math.abs(nextZero) > 0.005) {
-                console.log(Math.abs(zeroes[current - 1]) - Math.abs(nextZero));
                 zeroes.push(nextZero); //adds the root to array of zeroes
                 ++current;
             }
@@ -447,14 +438,15 @@ $(function () {
 
 
         //setExpr($('#derivResult').text()); //graphs second derivative
-        if ($('#rational').is(':checked')) {
-            calculateAsymptotes(); //calculates asymptotes of rational function
-            
+        if ($('#rational').is(':checked')) {            
             n = 1000;
 
             drawCurve('#' + $('#hdnFuncColor').val(), 1); //'#ff0f00', false);
 
             generatePlane(); //draws plane again on top of function
+
+            calculateAsymptotes(); //calculates asymptotes of rational function
+
 
         }
         else if ($('#polynomial').is(':checked')) {
@@ -471,7 +463,7 @@ $(function () {
             concavity(); //marks concavity + inflection points 
         }
         else if ($('#other').is(':checked')) {
-            n = 500;
+            n = 700;
             drawCurve('#' + $('#hdnFuncColor').val(), 1); //'#ff0f00', false);
 
             generatePlane(); //draws plane again on top of function
