@@ -169,9 +169,12 @@ $(function () {
     //takes approximate derivative at x with alternate form of difference quotient f(x+h)-f(x-h)/2h ~= f'(x) 
     function calculateDerivative(x) {
         //operates on assumption that f(x) = expr
-        var h = 0.00001;
+        var h = 0.0001;
         var derivative = (evalExpr(x + h) - evalExpr(x - h)) / (2 * h); //applied difference quotient
-        var result = Math.round(derivative * 1000000) / 1000000; //rounds answer
+
+        var result = derivative; //Math.round(derivative * 1000000) / 1000000; //rounds answer
+
+        //console.log(x, result);
         return result;
     }
 
@@ -182,7 +185,7 @@ $(function () {
 
         var secondDerivative = (calculateDerivative(x + h) - calculateDerivative(x - h)) / (2 * h); //applied difference quotient
 
-        var result = Math.round(secondDerivative * 10000000) / 10000000; //rounds answer
+        var result = secondDerivative; //Math.round(secondDerivative * 10000000000) / 10000000000; //rounds answer
 
         return result;
     }
@@ -239,29 +242,29 @@ $(function () {
         var xVal;
         var width = (0.05) * canvas.width / (xMax - xMin);
         var previous = calculateSecondDerivative(xMin - 0.01);
-        for (var i = xMin; i < xMax; i += 0.05) { //every 0.05 
+        for (var i = xMin; i < xMax; i += 0.01) { //every 0.05 
             xVal = (-xMin + i) * canvas.width / (xMax - xMin); //mapped x (shifts over + multiplies w/ proportions)
             var secondDeriv = calculateSecondDerivative(i); //secondDerivative at x=i
-
+            //console.log(i, secondDeriv);
             if ((secondDeriv < 0 && previous < 0) || (secondDeriv > 0 && previous > 0)) {
                 if (secondDeriv < 0) {
                     //if concave down
                     //draws rectangle of width 1 and canvas height
-                    c.fillStyle = "rgba(" + $('#hdn7').val() + ",0.3)";
+                    c.fillStyle = "rgba(" + $('#hdn7').val() + ",0.1)";
                     c.fillRect(xVal, 0, width, canvas.height);
                 }
-
 
                 else if (secondDeriv > 0) {
                     //if concave up
                     //draws rectangle of width 1 and canvas height                   
-                    c.fillStyle = "rgba(" + $('#hdn6').val() + ",0.3)";
+                    c.fillStyle = "rgba(" + $('#hdn6').val() + ",0.1)";
                     c.fillRect(xVal, 0, width, canvas.height);
                 }
             }
                 //if different signs
-            else if ((secondDeriv < 0 && previous > 0) || (secondDeriv > 0 && previous < 0) || (secondDeriv == 0)) {
+            else if ((secondDeriv < 0 && previous > 0) || (secondDeriv > 0 && previous < 0)) { //|| (secondDeriv == 0)) {
                 //at inflection point, should draw circle
+                //console.log(secondDeriv);
                 var yVal = (-(evalExpr(i) - yMax) * canvas.height) / (yMax - yMin);
                 c.beginPath();
                 c.arc(xVal, yVal, 5, 0, 2 * Math.PI, false); //draws circle of radius centered at (xVal, yVal)
@@ -306,6 +309,66 @@ $(function () {
                 c.stroke();
             }
         }
+        var node = tree;
+        var numeratorDegree = 0;
+        var An = 1, Bn = 1;
+        var denominatorDegree = 0;
+        var currentPower;
+        for (var i = 0; i < numerator.length; i++) {
+            if (numerator.charAt(i) == 'x') {
+                if (numerator.charAt(i + 1) == '^') { //if currently on x and is raised to a power
+                    currentPower = numerator.charAt(i + 2); //record power if higher than previous
+                } else {
+                    currentPower = 1;
+                }
+                if (currentPower > numeratorDegree) {
+                    numeratorDegree = currentPower;
+                    if (numerator.charAt(i - 1) == '*') { //if there's a coefficient, store it
+                        An = numerator.charAt(i - 2);
+                    }
+                }
+            }
+        }
+        for (var i = 0; i < denominator.length; i++) {
+            if (denominator.charAt(i) == 'x') { 
+                if (denominator.charAt(i + 1) == '^') { //if currently on x and is raised to a power
+                    currentPower = denominator.charAt(i + 2); //record power if higher than previous
+                } else {
+                    currentPower = 1;
+                }
+                if (currentPower > denominatorDegree) {
+                    denominatorDegree = currentPower;
+                    //console.log(denominator.charAt(i - 1), i);
+                    //console.log(i);
+                    if (denominator.charAt(i - 1) == '*') { //if there's a coefficient, store it 
+                        Bn = denominator.charAt(i - 2);
+                    }
+                }
+            }
+        }
+        //console.log(denominatorDegree, numeratorDegree);
+        //console.log(An, Bn);
+
+        //calculates where to draw horizontal asymptote
+        if (denominatorDegree > numeratorDegree) {
+            //draws horizontal asymptote at y = 0 if numerator and denominator have same degree
+            c.beginPath();
+            c.moveTo(0, canvas.height/2 );
+            c.lineTo(canvas.width, canvas.height/2);
+            c.stroke();
+            
+        } else if (denominatorDegree == numeratorDegree) {
+            var asymptote = An / Bn;
+            var yVal = (-yMin + asymptote) * canvas.height / (yMax - yMin); //mapped y
+            yVal = 600 - yVal; //flips it to match canvas coordinates
+            //console.log(yVal);
+            c.beginPath();
+            c.moveTo(0, yVal);
+            c.lineTo(canvas.width, yVal);
+            c.stroke();            
+        }
+        
+        
     }
 
     //precalculates symbolic derivatives and displays them in divs
