@@ -284,7 +284,8 @@ $(function () {
         var original = expr;
         for (var i = 0; i < expr.length; i++) {
             if (expr.charAt(i) == '/') {
-                var numerator = expr.substring(0, i - 1);
+                var numerator = expr.substring(0, i);
+                console.log(numerator);
                 denominator = expr.substring(i + 1);
                 break;
             }
@@ -309,28 +310,25 @@ $(function () {
                 c.stroke();
             }
         }
-        var node = tree;
         var numeratorDegree = 0;
-        var An = 1, Bn = 1;
         var denominatorDegree = 0;
         var currentPower;
         for (var i = 0; i < numerator.length; i++) {
-            if (numerator.charAt(i) == 'x') {
-                if (numerator.charAt(i + 1) == '^') { //if currently on x and is raised to a power
+            console.log(numerator.length, i, numerator.charAt(i));
+            if (numerator.charAt(i) == "x") {
+                if (numerator.charAt(i + 1) == "^") { //if currently on x and is raised to a power
                     currentPower = numerator.charAt(i + 2); //record power if higher than previous
                 } else {
                     currentPower = 1;
                 }
                 if (currentPower > numeratorDegree) {
                     numeratorDegree = currentPower;
-                    if (numerator.charAt(i - 1) == '*') { //if there's a coefficient, store it
-                        An = numerator.charAt(i - 2);
-                    }
-                }
+                }            
+
             }
         }
         for (var i = 0; i < denominator.length; i++) {
-            if (denominator.charAt(i) == 'x') { 
+            if (denominator.charAt(i) == 'x') {
                 if (denominator.charAt(i + 1) == '^') { //if currently on x and is raised to a power
                     currentPower = denominator.charAt(i + 2); //record power if higher than previous
                 } else {
@@ -338,37 +336,34 @@ $(function () {
                 }
                 if (currentPower > denominatorDegree) {
                     denominatorDegree = currentPower;
-                    //console.log(denominator.charAt(i - 1), i);
-                    //console.log(i);
-                    if (denominator.charAt(i - 1) == '*') { //if there's a coefficient, store it 
-                        Bn = denominator.charAt(i - 2);
-                    }
                 }
             }
         }
-        //console.log(denominatorDegree, numeratorDegree);
-        //console.log(An, Bn);
+        console.log(denominatorDegree, numeratorDegree);
 
         //calculates where to draw horizontal asymptote
         if (denominatorDegree > numeratorDegree) {
             //draws horizontal asymptote at y = 0 if numerator and denominator have same degree
             c.beginPath();
-            c.moveTo(0, canvas.height/2 );
-            c.lineTo(canvas.width, canvas.height/2);
+            c.moveTo(0, canvas.height / 2);
+            c.lineTo(canvas.width, canvas.height / 2);
             c.stroke();
-            
+
         } else if (denominatorDegree == numeratorDegree) {
-            var asymptote = An / Bn;
+            setExpr(original);
+            var leftAppr = evalExpr(-500);
+            var rightAppr = evalExpr(500);
+            var asymptote = (leftAppr + rightAppr) / 2;
             var yVal = (-yMin + asymptote) * canvas.height / (yMax - yMin); //mapped y
             yVal = 600 - yVal; //flips it to match canvas coordinates
             //console.log(yVal);
             c.beginPath();
             c.moveTo(0, yVal);
             c.lineTo(canvas.width, yVal);
-            c.stroke();            
+            c.stroke();
         }
-        
-        
+
+
     }
 
     //precalculates symbolic derivatives and displays them in divs
@@ -497,11 +492,11 @@ $(function () {
         //call function to calculate derivatives
 
         setExpr($('#inputField').val());   //graphs main function
-        
+
 
 
         //setExpr($('#derivResult').text()); //graphs second derivative
-        if ($('#rational').is(':checked')) {            
+        if ($('#rational').is(':checked')) {
             n = 1000;
 
             drawCurve('#' + $('#hdnFuncColor').val(), 1); //'#ff0f00', false);
