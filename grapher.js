@@ -221,8 +221,9 @@ $(function () {
 
                     //draw circle around this point
                     c.beginPath();
-                    c.arc(xVal, yVal, radius, 0, 2 * Math.PI, false); //draws circle of radius centered at (xVal, yVal)
-
+                    //c.arc(xVal, yVal, radius, 0, 2 * Math.PI, false); //draws circle of radius centered at (xVal, yVal)
+                    c.lineWidth = "2";
+                    c.rect((xVal-10), (yVal-10), 20, 20);
                     c.fillStyle = "rgba(" + $('#hdn5').val() + ",0.5)";
                     c.fill();
                 }
