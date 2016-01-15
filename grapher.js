@@ -494,6 +494,8 @@ $(function () {
 
         //setExpr($('#derivResult').text()); //graphs second derivative
         if ($('#rational').is(':checked')) {
+            c.clearRect(0, 0, canvas.width, canvas.height);
+
             n = 1000;
 
             drawCurve('#' + $('#hdnFuncColor').val(), 1); //'#ff0f00', false);
@@ -519,6 +521,8 @@ $(function () {
             drawCurve('#' + $('#hdn3').val(), 3); //graphs second derivative
         }
         else if ($('#other').is(':checked')) {
+            c.clearRect(0, 0, canvas.width, canvas.height);
+
             n = 500;
             c.clearRect(0, 0, canvas.width, canvas.height);
 
