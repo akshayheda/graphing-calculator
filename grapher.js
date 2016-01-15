@@ -94,10 +94,6 @@ $(function () {
             // These are values in math coordinates.
             mathX, mathY;
 
-        if (current == 1) {
-            // Clear the canvas.
-            c.clearRect(0, 0, canvas.width, canvas.height);
-        }
         c.save();
 
         // Plot the math expression as a curve using the Canvas API:
@@ -221,7 +217,7 @@ $(function () {
 
                     //draw circle around this point
                     c.beginPath();
-                    //c.arc(xVal, yVal, radius, 0, 2 * Math.PI, false); //draws circle of radius centered at (xVal, yVal)
+                    //draws square of radius centered at (xVal, yVal)
                     c.lineWidth = "2";
                     c.rect((xVal-10), (yVal-10), 20, 20);
                     c.fillStyle = "rgba(" + $('#hdn5').val() + ",0.5)";
@@ -509,29 +505,32 @@ $(function () {
 
         }
         else if ($('#polynomial').is(':checked')) {
-            n = 1000;
+            c.clearRect(0, 0, canvas.width, canvas.height);
+
+            n = 1000;            
+            extrema(); //highlights extrema
+            concavity(); //marks concavity + inflection points 
+
             drawCurve('#' + $('#hdnFuncColor').val(), 1); //'#ff0f00', false);
 
             generatePlane(); //draws plane again on top of function
 
-
             drawCurve('#' + $('#hdn2').val(), 2); //graphs first derivative
             drawCurve('#' + $('#hdn3').val(), 3); //graphs second derivative
-
-            extrema(); //highlights extrema
-            concavity(); //marks concavity + inflection points 
         }
         else if ($('#other').is(':checked')) {
-            n = 700;
+            n = 500;
+            c.clearRect(0, 0, canvas.width, canvas.height);
+
+            extrema(); //highlights extrema
+            concavity(); //marks concavity + inflection points 
+
             drawCurve('#' + $('#hdnFuncColor').val(), 1); //'#ff0f00', false);
 
             generatePlane(); //draws plane again on top of function
 
             drawCurve('#' + $('#hdn2').val(), 2); //graphs first derivative
             drawCurve('#' + $('#hdn3').val(), 3); //graphs second derivative
-
-            extrema(); //highlights extrema
-            concavity(); //marks concavity + inflection points 
         }
 
     });
