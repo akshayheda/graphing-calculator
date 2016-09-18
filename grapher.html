@@ -36,12 +36,14 @@
 </head>
 <body>
  <!--- nav bar -->
-    <nav>
+<nav>
     <div class="nav-wrapper teal lighten-2">
-      <a href="#" class="brand-logo">A Graphing Calculator</a>
+      <a href="#" class="brand-logo center">A Graphing Calculator</a>
+      
       <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><a href="sass.html">Options</a></li>
+        <li><a href=""><!-- enter link here someday --></a></li>
       </ul>
+    
     </div>
   </nav>
   <!-- end nav bar -->
@@ -50,11 +52,11 @@
 
 
   <!-- page layout here -->
-  <div class="row">
+  <div class="row container">
 
       <div class="col s3">
         <!-- left navigation panel -->
-        <div>
+            <div class="row">
                 <form action="#">
                     Function Type:
 
@@ -74,49 +76,39 @@
                     </p>
 
                     </form>
-                </div>
-                
-                <div id="xycoordinates" class="regularFont">
-                    Select a Color:
-                    <div id="outerDiv">
-                        <input type="hidden" id="hdnFuncColor" />
-                        <button class="jscolor {valueElement:'hdnFuncColor',value:'ff0f00'}"
-                                style="width:50px; height:20px;" id="functionColor"></button> Function
-                    </div>
-                    <div id="Div1">
-                        <input type="hidden" id="hdn2" />
+            </div>
+            <div class="row"> </div>
+            <div class="row">
+                 <!-- Dropdown Trigger -->
+                  <a class='dropdown-button btn' href='#' data-activates='dropdown1'>Select Colors</a>
+
+                  <!-- Dropdown Structure -->
+                  <ul id='dropdown1' class='dropdown-content'>
+                    <li><input type="hidden" id="hdnFuncColor" />
+                        <button class="jscolor {valueElement:'hdnFuncColor',value:'ff0f00'}" 
+                                style="width:50px; height:20px;"id="functionColor"></button> Function</li>
+                    <li><input type="hidden" id="hdn2" />
                         <button class="jscolor {valueElement:hdn2,value:'9900CC'}"
-                                style="width:50px; height:20px;" id="derivColor"></button> First Derivative
-                    </div>
-                    <div id="Div3">
-                        <input type="hidden" id="hdn3" />
+                                style="width:50px; height:20px;" id="derivColor"></button>First Derivative</a></li>
+                    <li><input type="hidden" id="hdn3" />
                         <button class="jscolor {valueElement:hdn3,value:'336600'}"
-                                style="width:50px; height:20px;" id="2derivColor"></button> Second Derivative
-                    </div>
-
-                    <br />
-                    <div id="Div4">
-                        <input type="hidden" id="hdn4" value="255,15,0" />
+                                style="width:50px; height:20px;" id="2derivColor"></button>Second Derivative</a></li>
+                    <li class="divider"></li>
+                    <li><input type="hidden" id="hdn4" value="255,15,0" />
                         <button class="jscolor {value:'ff0f00', onFineChange:'getRGBColor(this, hdn4)'}"
-                                style="width: 50px; height: 20px; text-indent: -9999px;" id="inflectioncolor"></button> Inflection Point
-                    </div>
-                    <div id="Div5">
-                        <input type="hidden" id="hdn5" value="153,0,204" />
+                                style="width: 50px; height: 20px; text-indent: -9999px;" id="inflectioncolor"></button>Inflection Point</a></li>
+                    <li><input type="hidden" id="hdn5" value="153,0,204" />
                         <button class="jscolor {value:'9900CC', onFineChange:'getRGBColor(this, hdn5)'}"
-                                style="width: 50px; height: 20px; text-indent: -9999px;" id="extremaColor"></button> Extrema
-                    </div>
-                    <div id="Div6">
-                        <input type="hidden" id="hdn6" value="51,102,0" />
+                                style="width: 50px; height: 20px; text-indent: -9999px;" id="extremaColor"></button>Extrema</li>
+                    <li><input type="hidden" id="hdn6" value="51,102,0" />
                         <button class="jscolor {value:'336600', onFineChange:'getRGBColor(this, hdn6)'}"
-                                style="width: 50px; height: 20px; text-indent: -9999px;" id="upColor"></button> Concave Up
-                    </div>
-                    <div id="Div7">
-                        <input type="hidden" id="hdn7" value="0,0,0" />
+                                style="width: 50px; height: 20px; text-indent: -9999px;" id="upColor"></button>Concave Up</a></li>
+                    <li><input type="hidden" id="hdn7" value="0,0,0" />
                         <button class="jscolor {onFineChange:'getRGBColor(this, hdn7)', value: '000000'}"
-                                style="width: 50px; height: 20px; text-indent: -9999px;" id="downColor"></button> Concave Down
-                    </div>
-
-                </div>
+                                style="width: 50px; height: 20px; text-indent: -9999px;" id="downColor"></button>Concave Down</a></li>
+                  </ul>
+            </div>
+            <div class="row">
                 <div class="row">
                     <div class="input-field ">
                         <input placeholder="Enter a Function to Graph" type="text" id="inputField">
@@ -130,7 +122,8 @@
                     </button>
                 </div>
 
-      </div>
+            </div>  
+        </div>
 
       <div class="col s9">
         <!-- right page content  -->
@@ -139,20 +132,8 @@
 
     </div>
 
+    <!-- end page content-->
 
-
-
-    <div class="colmask leftmenu">
-        <div class="colleft">
-            <div class="col1">
-                
-            </div>
-            <div class="col2">
-                
-                
-            </div>
-        </div>
-    </div>
     <div id="footer">
         <p class="regularFont">
             Key to Entering Functions: <br />
