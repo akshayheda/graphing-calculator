@@ -35,7 +35,7 @@
     </script>
 </head>
 <body>
-
+ <!--- nav bar -->
     <nav>
     <div class="nav-wrapper teal lighten-2">
       <a href="#" class="brand-logo">A Graphing Calculator</a>
@@ -43,16 +43,18 @@
         <li><a href="sass.html">Options</a></li>
       </ul>
     </div>
-    <p id="layoutdims">
   </nav>
-    <div class="colmask leftmenu">
-        <div class="colleft">
-            <div class="col1">
-                <canvas width="600" height="600" id="myCanvas"></canvas>
-            </div>
-            <div class="col2">
-                
-                <div id="radioStyle" class="regularFont">
+  <!-- end nav bar -->
+
+  <div class="row"></div>
+
+
+  <!-- page layout here -->
+  <div class="row">
+
+      <div class="col s3">
+        <!-- left navigation panel -->
+        <div>
                 <form action="#">
                     Function Type:
 
@@ -61,13 +63,15 @@
                       <label for="rational">Rational Function</label>
                     </p>
 
-                    <input type="radio" name="functionType" value="rational" id="rational">Rational Function
+                    <p>
+                      <input name="functionType" type="radio" id="polynomial" class="with-gap" checked />
+                      <label for="polynomial">Polynomial Function</label>
+                    </p>
 
-                    <br />
-                    <input type="radio" name="functionType" value="polynomial" id="polynomial" checked>Polynomial Function
-
-                    <br />
-                    <input type="radio" name="functionType" value="other" id="other">Logarithmic, Trigonometric, or Exponential Function
+                    <p>
+                      <input name="functionType" type="radio" id="other" class="with-gap" />
+                      <label for="other">Logarithmic, Trigonometric, or Exponential Function</label>
+                    </p>
 
                     </form>
                 </div>
@@ -126,6 +130,26 @@
                     </button>
                 </div>
 
+      </div>
+
+      <div class="col s9">
+        <!-- right page content  -->
+        <canvas width="600" height="600" id="myCanvas"></canvas>
+      </div>
+
+    </div>
+
+
+
+
+    <div class="colmask leftmenu">
+        <div class="colleft">
+            <div class="col1">
+                
+            </div>
+            <div class="col2">
+                
+                
             </div>
         </div>
     </div>
