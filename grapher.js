@@ -45,7 +45,7 @@ $(function () {
     //generates axes
     function generatePlane() { //generates x and y axes
         c.beginPath();
-        c.strokeStyle = "rgba(0,0,255,0.3)";
+        c.strokeStyle = "rgba(124,124,124,0.3)";
         var currentPt;
         //horizontal(y) lines
         for (var i = 0; i <= (yMax - yMin) ; i++) {
@@ -63,7 +63,7 @@ $(function () {
         c.stroke();
         c.beginPath();
         //y axis
-        c.strokeStyle = "#000";
+        c.strokeStyle = "#FFF";
         c.moveTo(canvas.width / 2, 0);
         c.lineTo(canvas.width / 2, canvas.height);
 
@@ -247,14 +247,14 @@ $(function () {
                 if (secondDeriv < 0) {
                     //if concave down
                     //draws rectangle of width 1 and canvas height
-                    c.fillStyle = "rgba(" + $('#hdn7').val() + ",0.1)";
+                    c.fillStyle = "rgba(" + $('#hdn7').val() + ",0.05)";
                     c.fillRect(xVal, 0, width, canvas.height);
                 }
 
                 else if (secondDeriv > 0) {
                     //if concave up
                     //draws rectangle of width 1 and canvas height                   
-                    c.fillStyle = "rgba(" + $('#hdn6').val() + ",0.1)";
+                    c.fillStyle = "rgba(" + $('#hdn6').val() + ",0.05)";
                     c.fillRect(xVal, 0, width, canvas.height);
                 }
             }
@@ -547,4 +547,7 @@ $(function () {
 
     });
     */
+
+      $('.modal-trigger').leanModal();
+
 });

@@ -79,34 +79,44 @@
 
 
             <div class="row">
-                 <!-- Dropdown Trigger -->
-                  <a class='dropdown-button btn' href='#' data-activates='dropdown1'>Select Colors</a>
+                <!-- Modal Trigger -->
+                <button data-target="colorModal" class="btn modal-trigger">Select Colors</button>
 
-                  <!-- Dropdown Structure -->
-                  <ul id='dropdown1' class='dropdown-content'>
+                  <!-- Modal Structure -->
+                  <div id="colorModal" class="modal modal-fixed-footer">
+                    <div class="modal-content">
+                      <h4>Colors</h4>
+                      <p>Select colors below</p>
+                      <ul>
                     <li><input type="hidden" id="hdnFuncColor" />
-                        <button class="jscolor {valueElement:'hdnFuncColor',value:'ff0f00'}" 
-                                style="width:50px; height:20px;"id="functionColor"></button> Function</li>
+                        <button class="waves-effect waves-light btn jscolor {valueElement:'hdnFuncColor',value:'009688'}" 
+                                id="functionColor">Function</button> </li>
                     <li><input type="hidden" id="hdn2" />
-                        <button class="jscolor {valueElement:hdn2,value:'9900CC'}"
-                                style="width:50px; height:20px;" id="derivColor"></button>First Derivative</a></li>
+                        <button class="waves-effect waves-light btn jscolor {valueElement:hdn2,value:'6BA292'}"
+                                 id="derivColor">First Derivative</button></li>
                     <li><input type="hidden" id="hdn3" />
-                        <button class="jscolor {valueElement:hdn3,value:'336600'}"
-                                style="width:50px; height:20px;" id="2derivColor"></button>Second Derivative</a></li>
-                    <li class="divider"></li>
+                        <button class="waves-effect waves-light btn jscolor {valueElement:hdn3,value:'595959'}"
+                                id="2derivColor">Second Derivative</button></li>
+                    <br>
                     <li><input type="hidden" id="hdn4" value="255,15,0" />
-                        <button class="jscolor {value:'ff0f00', onFineChange:'getRGBColor(this, hdn4)'}"
-                                style="width: 50px; height: 20px; text-indent: -9999px;" id="inflectioncolor"></button>Inflection Point</a></li>
+                        <button class="waves-effect waves-light btn jscolor {valueElement:hdn4,value:'BCA3AC', onFineChange:'getRGBColor(this, hdn4)'}"
+                                id="inflectioncolor">Inflection Point</button></li>
                     <li><input type="hidden" id="hdn5" value="153,0,204" />
-                        <button class="jscolor {value:'9900CC', onFineChange:'getRGBColor(this, hdn5)'}"
-                                style="width: 50px; height: 20px; text-indent: -9999px;" id="extremaColor"></button>Extrema</li>
+                        <button class="waves-effect waves-light btn jscolor {valueElement:hdn5, value:'3581B8', onFineChange:'getRGBColor(this, hdn5)'}"
+                                id="extremaColor">Extrema</button></li>
                     <li><input type="hidden" id="hdn6" value="51,102,0" />
-                        <button class="jscolor {value:'336600', onFineChange:'getRGBColor(this, hdn6)'}"
-                                style="width: 50px; height: 20px; text-indent: -9999px;" id="upColor"></button>Concave Up</a></li>
+                        <button class="waves-effect waves-light btn jscolor {valueElement:hdn6, value:'AB9B96', onFineChange:'getRGBColor(this, hdn6)'}"
+                                id="upColor">Concave Up</button></li>
                     <li><input type="hidden" id="hdn7" value="0,0,0" />
-                        <button class="jscolor {onFineChange:'getRGBColor(this, hdn7)', value: '000000'}"
-                                style="width: 50px; height: 20px; text-indent: -9999px;" id="downColor"></button>Concave Down</a></li>
+                        <button class="waves-effect waves-light btn jscolor {onFineChange:'getRGBColor(this, hdn7)', valueElement:hdn7,value:'E8F1F2 '}"
+                                id="downColor">Concave Down</button></li>
                   </ul>
+                    </div>
+                    <div class="modal-footer">
+                      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+                    </div>
+                  </div>
+                  
             </div>
             <div class="row"> </div>
 
